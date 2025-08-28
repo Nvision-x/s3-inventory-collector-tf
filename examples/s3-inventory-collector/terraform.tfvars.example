@@ -1,0 +1,20 @@
+# Example configuration for S3 Inventory Collector Module
+
+# AWS Region
+aws_region = "eu-central-1"
+
+# Collector bucket name (must be globally unique)
+collector_bucket_name = "my-org-s3-inventory-collector"
+
+# List of AWS account IDs that will send inventory data
+source_account_ids = [
+  "111111111111",  # Production account
+  "222222222222",  # Development account
+  "333333333333"   # Staging account
+]
+
+# Environment
+environment = "production"
+
+# Retention period for inventory files (in days)
+inventory_retention_days = 90
