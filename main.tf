@@ -1,103 +1,118 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
+  }
+}
+
 data "aws_caller_identity" "current" {}
 
-resource "aws_s3_bucket" "inventory_collector" {
-  bucket = var.collector_bucket_name
-
-  tags = merge(
-    var.tags,
-    {
-      Name    = "S3 Inventory Collector Bucket"
-      Purpose = "Central collection of S3 inventory from all accounts"
-    }
-  )
+locals {
+  regions_set = toset(var.regions)
 }
 
-resource "aws_s3_bucket_versioning" "inventory_collector" {
-  bucket = aws_s3_bucket.inventory_collector.id
-
-  versioning_configuration {
-    status = var.enable_versioning ? "Enabled" : "Disabled"
-  }
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "inventory_collector" {
-  bucket = aws_s3_bucket.inventory_collector.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = var.encryption_algorithm
-    }
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "inventory_collector" {
-  bucket = aws_s3_bucket.inventory_collector.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "inventory_collector" {
-  count = var.enable_lifecycle ? 1 : 0
+module "inventory_collector_us_east_1" {
+  count    = contains(var.regions, "us-east-1") ? 1 : 0
+  source   = "./modules/regional-bucket"
   
-  bucket = aws_s3_bucket.inventory_collector.id
-
-  rule {
-    id     = "delete-old-inventory-files"
-    status = "Enabled"
-
-    filter {}
-
-    expiration {
-      days = var.inventory_retention_days
-    }
-
-    noncurrent_version_expiration {
-      noncurrent_days = var.noncurrent_version_expiration_days
-    }
+  providers = {
+    aws = aws.us_east_1
   }
+
+  region                             = "us-east-1"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
 }
 
-resource "aws_s3_bucket_policy" "inventory_collector" {
-  bucket = aws_s3_bucket.inventory_collector.id
+module "inventory_collector_us_east_2" {
+  count    = contains(var.regions, "us-east-2") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.us_east_2
+  }
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "AllowInventoryFromSourceAccounts"
-        Effect = "Allow"
-        Principal = {
-          Service = "s3.amazonaws.com"
-        }
-        Action = "s3:PutObject"
-        Resource = "${aws_s3_bucket.inventory_collector.arn}/*"
-        Condition = {
-          StringEquals = {
-            "s3:x-amz-acl" = "bucket-owner-full-control"
-            "aws:SourceAccount" = var.source_account_ids
-          }
-        }
-      },
-      {
-        Sid    = "AllowInventoryBucketCheck"
-        Effect = "Allow"
-        Principal = {
-          Service = "s3.amazonaws.com"
-        }
-        Action = [
-          "s3:GetBucketAcl",
-          "s3:ListBucket"
-        ]
-        Resource = aws_s3_bucket.inventory_collector.arn
-        Condition = {
-          StringEquals = {
-            "aws:SourceAccount" = var.source_account_ids
-          }
-        }
-      }
-    ]
-  })
+  region                             = "us-east-2"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+module "inventory_collector_us_west_1" {
+  count    = contains(var.regions, "us-west-1") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.us_west_1
+  }
+
+  region                             = "us-west-1"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+module "inventory_collector_us_west_2" {
+  count    = contains(var.regions, "us-west-2") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.us_west_2
+  }
+
+  region                             = "us-west-2"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
+
+provider "aws" {
+  alias  = "us_east_2"
+  region = "us-east-2"
+}
+
+provider "aws" {
+  alias  = "us_west_1"
+  region = "us-west-1"
+}
+
+provider "aws" {
+  alias  = "us_west_2"
+  region = "us-west-2"
 }

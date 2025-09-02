@@ -1,0 +1,22 @@
+# Example configuration for organization-wide access mode
+# This allows all accounts in the specified organization to send inventory data
+
+regions                 = ["us-east-1", "us-west-2"]
+collector_bucket_prefix = "my-org-s3-inventory"
+organization_id         = "o-1234567890"
+
+# Organization-wide access mode (default)
+policy_access_mode = "organization"
+# allowed_account_ids is not needed for organization mode
+
+inventory_retention_days           = 90
+noncurrent_version_expiration_days = 7
+enable_versioning                  = true
+enable_lifecycle                   = true
+encryption_algorithm               = "AES256"
+
+tags = {
+  Environment = "production"
+  ManagedBy   = "terraform"
+  Purpose     = "s3-inventory-collection"
+}

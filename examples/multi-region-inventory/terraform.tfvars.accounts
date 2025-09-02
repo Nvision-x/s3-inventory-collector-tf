@@ -1,0 +1,27 @@
+# Example configuration for specific accounts access mode
+# This restricts access to only the listed AWS account IDs
+
+regions                 = ["us-east-1", "us-west-2"]
+collector_bucket_prefix = "restricted-s3-inventory"
+organization_id         = "o-1234567890"
+
+# Specific accounts access mode
+policy_access_mode = "accounts"
+allowed_account_ids = [
+  "111111111111",
+  "222222222222",
+  "333333333333"
+]
+
+inventory_retention_days           = 90
+noncurrent_version_expiration_days = 7
+enable_versioning                  = true
+enable_lifecycle                   = true
+encryption_algorithm               = "AES256"
+
+tags = {
+  Environment = "production"
+  ManagedBy   = "terraform"
+  Purpose     = "s3-inventory-collection"
+  AccessMode  = "restricted"
+}

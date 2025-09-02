@@ -1,20 +1,15 @@
-variable "regions" {
-  description = "List of AWS regions where inventory collector buckets will be created"
-  type        = list(string)
-  default     = ["us-east-1", "us-east-2", "us-west-1", "us-west-2"]
+variable "region" {
+  description = "AWS region for the inventory collector bucket"
+  type        = string
 }
 
 variable "collector_bucket_prefix" {
-  description = "Prefix for the S3 collector bucket names (will be suffixed with region)"
+  description = "Prefix for the S3 collector bucket name (will be suffixed with region)"
   type        = string
-  validation {
-    condition     = can(regex("^[a-z0-9][a-z0-9-]*[a-z0-9]$", var.collector_bucket_prefix))
-    error_message = "Bucket prefix must start and end with a lowercase letter or number, and can contain hyphens."
-  }
 }
 
 variable "organization_id" {
-  description = "AWS Organization ID that will be allowed to send inventory data to these buckets"
+  description = "AWS Organization ID that will be allowed to send inventory data to this bucket"
   type        = string
 }
 
@@ -22,10 +17,6 @@ variable "policy_access_mode" {
   description = "Access mode for the bucket policy: 'organization' for full org access or 'accounts' for specific account access"
   type        = string
   default     = "organization"
-  validation {
-    condition     = contains(["organization", "accounts"], var.policy_access_mode)
-    error_message = "Policy access mode must be either 'organization' or 'accounts'."
-  }
 }
 
 variable "allowed_account_ids" {
@@ -47,13 +38,13 @@ variable "noncurrent_version_expiration_days" {
 }
 
 variable "enable_versioning" {
-  description = "Enable versioning for the S3 buckets"
+  description = "Enable versioning for the S3 bucket"
   type        = bool
   default     = true
 }
 
 variable "enable_lifecycle" {
-  description = "Enable lifecycle rules for the S3 buckets"
+  description = "Enable lifecycle rules for the S3 bucket"
   type        = bool
   default     = true
 }
@@ -62,14 +53,10 @@ variable "encryption_algorithm" {
   description = "Server-side encryption algorithm to use (AES256 or aws:kms)"
   type        = string
   default     = "AES256"
-  validation {
-    condition     = contains(["AES256", "aws:kms"], var.encryption_algorithm)
-    error_message = "Encryption algorithm must be either AES256 or aws:kms."
-  }
 }
 
 variable "tags" {
-  description = "A map of tags to assign to all resources"
+  description = "A map of tags to assign to the resources"
   type        = map(string)
   default     = {}
 }
