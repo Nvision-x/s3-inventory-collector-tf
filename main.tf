@@ -97,6 +97,111 @@ module "inventory_collector_us_west_2" {
   tags                               = var.tags
 }
 
+module "inventory_collector_eu_west_1" {
+  count    = contains(var.regions, "eu-west-1") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.eu_west_1
+  }
+
+  region                             = "eu-west-1"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+module "inventory_collector_eu_west_2" {
+  count    = contains(var.regions, "eu-west-2") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.eu_west_2
+  }
+
+  region                             = "eu-west-2"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+module "inventory_collector_eu_west_3" {
+  count    = contains(var.regions, "eu-west-3") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.eu_west_3
+  }
+
+  region                             = "eu-west-3"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+module "inventory_collector_eu_central_1" {
+  count    = contains(var.regions, "eu-central-1") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.eu_central_1
+  }
+
+  region                             = "eu-central-1"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
+module "inventory_collector_eu_north_1" {
+  count    = contains(var.regions, "eu-north-1") ? 1 : 0
+  source   = "./modules/regional-bucket"
+  
+  providers = {
+    aws = aws.eu_north_1
+  }
+
+  region                             = "eu-north-1"
+  collector_bucket_prefix            = var.collector_bucket_prefix
+  organization_id                    = var.organization_id
+  policy_access_mode                 = var.policy_access_mode
+  allowed_account_ids                = var.allowed_account_ids
+  inventory_retention_days           = var.inventory_retention_days
+  noncurrent_version_expiration_days = var.noncurrent_version_expiration_days
+  enable_versioning                  = var.enable_versioning
+  enable_lifecycle                   = var.enable_lifecycle
+  encryption_algorithm               = var.encryption_algorithm
+  tags                               = var.tags
+}
+
 provider "aws" {
   alias  = "us_east_1"
   region = "us-east-1"
@@ -115,4 +220,29 @@ provider "aws" {
 provider "aws" {
   alias  = "us_west_2"
   region = "us-west-2"
+}
+
+provider "aws" {
+  alias  = "eu_west_1"
+  region = "eu-west-1"
+}
+
+provider "aws" {
+  alias  = "eu_west_2"
+  region = "eu-west-2"
+}
+
+provider "aws" {
+  alias  = "eu_west_3"
+  region = "eu-west-3"
+}
+
+provider "aws" {
+  alias  = "eu_central_1"
+  region = "eu-central-1"
+}
+
+provider "aws" {
+  alias  = "eu_north_1"
+  region = "eu-north-1"
 }
