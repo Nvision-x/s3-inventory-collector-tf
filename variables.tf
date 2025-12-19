@@ -3,13 +3,10 @@ variable "regions" {
     List of AWS regions where inventory collector buckets will be created.
     Supported regions:
     - US: us-east-1, us-east-2, us-west-1, us-west-2
-    - EU: eu-west-1, eu-west-2, eu-west-3, eu-central-1, eu-central-2, eu-north-1, eu-south-1, eu-south-2
-    - Asia Pacific: ap-south-1, ap-south-2, ap-northeast-1, ap-northeast-2, ap-northeast-3, ap-southeast-1, ap-southeast-2, ap-southeast-3, ap-southeast-4, ap-southeast-5, ap-east-1
-    - Canada: ca-central-1, ca-west-1
+    - EU: eu-west-1, eu-west-2, eu-west-3, eu-central-1, eu-north-1
+    - Asia Pacific: ap-south-1, ap-northeast-1, ap-northeast-2, ap-northeast-3, ap-southeast-1, ap-southeast-2
+    - Canada: ca-central-1
     - South America: sa-east-1
-    - Middle East: me-south-1, me-central-1
-    - Africa: af-south-1
-    - Israel: il-central-1
   EOT
   type        = list(string)
   default     = ["us-east-1", "us-east-2", "us-west-1", "us-west-2"]
