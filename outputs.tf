@@ -349,3 +349,4 @@ output "regions_deployed" {
   description = "List of regions where inventory collector buckets are deployed"
   value       = var.regions
 }
+
