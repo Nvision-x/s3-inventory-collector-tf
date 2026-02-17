@@ -14,8 +14,9 @@ variable "organization_id" {
 }
 
 variable "bucket_owner_account_id" {
-  description = "AWS account ID of the bucket owner (used for IAM access in bucket policy)"
+  description = "AWS account ID of the bucket owner (used for IAM access in bucket policy). If not set, defaults to the caller's account ID."
   type        = string
+  default     = null
 }
 
 variable "policy_access_mode" {
