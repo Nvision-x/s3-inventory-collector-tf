@@ -84,6 +84,18 @@ resource "aws_s3_bucket_policy" "inventory_collector_org" {
     Version = "2012-10-17"
     Statement = [
       {
+        Sid    = "AllowBucketOwnerAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "s3:*"
+        Resource = [
+          aws_s3_bucket.inventory_collector.arn,
+          "${aws_s3_bucket.inventory_collector.arn}/*"
+        ]
+      },
+      {
         Sid    = "AllowInventoryFromOrganization"
         Effect = "Allow"
         Principal = {
@@ -134,6 +146,18 @@ resource "aws_s3_bucket_policy" "inventory_collector_accounts" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      {
+        Sid    = "AllowBucketOwnerAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "s3:*"
+        Resource = [
+          aws_s3_bucket.inventory_collector.arn,
+          "${aws_s3_bucket.inventory_collector.arn}/*"
+        ]
+      },
       {
         Sid    = "AllowInventoryFromAccounts"
         Effect = "Allow"
