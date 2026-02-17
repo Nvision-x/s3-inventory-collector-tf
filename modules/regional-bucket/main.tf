@@ -72,8 +72,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "inventory_collector" {
   }
 }
 
-data "aws_caller_identity" "current" {}
-
 # Organization-wide access policy
 resource "aws_s3_bucket_policy" "inventory_collector_org" {
   count = var.policy_access_mode == "organization" ? 1 : 0
@@ -87,7 +85,7 @@ resource "aws_s3_bucket_policy" "inventory_collector_org" {
         Sid    = "AllowBucketOwnerAccess"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+          AWS = "arn:aws:iam::${var.bucket_owner_account_id}:root"
         }
         Action   = "s3:*"
         Resource = [
@@ -150,7 +148,7 @@ resource "aws_s3_bucket_policy" "inventory_collector_accounts" {
         Sid    = "AllowBucketOwnerAccess"
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+          AWS = "arn:aws:iam::${var.bucket_owner_account_id}:root"
         }
         Action   = "s3:*"
         Resource = [

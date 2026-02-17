@@ -13,6 +13,11 @@ variable "organization_id" {
   type        = string
 }
 
+variable "bucket_owner_account_id" {
+  description = "AWS account ID of the bucket owner (used for IAM access in bucket policy)"
+  type        = string
+}
+
 variable "policy_access_mode" {
   description = "Access mode for the bucket policy: 'organization' for full org access or 'accounts' for specific account access"
   type        = string
